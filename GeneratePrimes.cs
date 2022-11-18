@@ -9,7 +9,7 @@
 using System;
 public class PrimeGenerator
 {
-    private static bool[] f;
+    private static bool[] isCrossed;
     private static int[] result;
     public static int[] GeneratePrimeNumbers(int maxValue)
     {
@@ -25,35 +25,39 @@ public class PrimeGenerator
     }
     private static void InitializeArrayOfIntegers(int maxValue)
     {
-        // объявления
-        f = new bool[maxValue + 1];
-        f[0] = f[1] = false; //не простые числа и не кратные
-        for (int i = 2; i < f.Length; i++)
-            f[i] = true;
+        isCrossed = new bool[maxValue + 1];
+        for (int i = 2; i < isCrossed.Length; i++)
+            isCrossed[i] = false;
     }
-    private static void Sieve()
+    private static void CrossOutMultiples()
     {
-        int i;
-        int j;
-        for (i = 2; i < Math.Sqrt(s) + 1; i++)
+        int maxPrimeFactor = CalcMaxPrimeFactor();
+        for (int i = 2; i < maxPrimeFactor + 1; i++)
         {
-            if (f[i]) // если i не вычеркнуто, вычеркнуть его кратные.
-            {
-                for (j = 2 * i; j < s; j += i)
-                    f[j] = false; // кратное – не простое число
-            }
+            if (NotCrossed(i))
+                CrossOutputMultiplesOf(i);
         }
     }
-    private static void InitializeSieve(int maxValue)
+    private static int CalcMaxPrimeFactor()
     {
-        // объявления
-        s = maxValue + 1; // размер массива
-        f = new bool[s];
-        int i;
-        // инициализировать элементы массива значением true.
-        for (i = 0; i < s; i++)
-            f[i] = true;
-        // исключить заведомо не простые числа
-        f[0] = f[1] = false;
+        // Вычеркиваем все кратные p, где p – простое число. Таким
+        // образом, любое вычеркнутое число разлагается в произведение
+        // множителей p и q. Если p > sqrt из размера массива, то q не
+        // может быть больше 1. Таким образом, p – максимальный простой
+        // множитель всех чисел в массиве и одновременно верхний предел
+        // итераций.
+        double maxPrimeFactor = Math.Sqrt(isCrossed.Length) + 1;
+        return (int)maxPrimeFactor;
+    }
+    private static void CrossOutputMultiplesOf(int i)
+    {
+        for (int multiple = 2 * i;
+        multiple < isCrossed.Length;
+        multiple += i)
+            isCrossed[multiple] = true;
+    }
+    private static bool NotCrossed(int i)
+    {
+        return isCrossed[i] == false;
     }
 }
