@@ -9,39 +9,27 @@
 using System;
 public class PrimeGenerator
 {
-    private static int s;
     private static bool[] f;
-    private static int[] primes;
+    private static int[] result;
     public static int[] GeneratePrimeNumbers(int maxValue)
     {
         if (maxValue < 2)
             return new int[0];
         else
         {
-            InitializeSieve(maxValue);
-            Sieve();
-            LoadPrimes();
-            return primes; // вернуть простые числа
+            InitializeArrayOfIntegers(maxValue);
+            CrossOutMultiples();
+            PutUncrossedIntegersIntoResult();
+            return result;
         }
     }
-    private static void LoadPrimes()
+    private static void InitializeArrayOfIntegers(int maxValue)
     {
-        int i;
-        int j;
-        // сколько оказалось простых чисел?
-        int count = 0;
-        for (i = 0; i < s; i++)
-        {
-            if (f[i])
-                count++; // увеличить счетчик
-        }
-        primes = new int[count];
-        // поместить простые числа в результирующий массив
-        for (i = 0, j = 0; i < s; i++)
-        {
-            if (f[i]) // если простое
-                primes[j++] = i;
-        }
+        // объявления
+        f = new bool[maxValue + 1];
+        f[0] = f[1] = false; //не простые числа и не кратные
+        for (int i = 2; i < f.Length; i++)
+            f[i] = true;
     }
     private static void Sieve()
     {
