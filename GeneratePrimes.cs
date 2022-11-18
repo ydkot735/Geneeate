@@ -23,12 +23,25 @@ public class PrimeGenerator
             return result;
         }
     }
-    private static void InitializeArrayOfIntegers(int maxValue)
+private static void PutUncrossedIntegersIntoResult()
+{
+    result = new int[NumberOfUncrossedIntegers()];
+    for (int j = 0, i = 2; i < isCrossed.Length; i++)
     {
-        isCrossed = new bool[maxValue + 1];
-        for (int i = 2; i < isCrossed.Length; i++)
-            isCrossed[i] = false;
+        if (NotCrossed(i))
+            result[j++] = i;
     }
+}
+private static int NumberOfUncrossedIntegers()
+{
+    int count = 0;
+    for (int i = 2; i < isCrossed.Length; i++)
+    {
+        if (NotCrossed(i))
+            count++; // увеличить счетчик
+    }
+    return count;
+}
     private static void CrossOutMultiples()
     {
         int maxPrimeFactor = CalcMaxPrimeFactor();
